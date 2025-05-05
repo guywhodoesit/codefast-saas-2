@@ -1,3 +1,4 @@
+import Image from "next/image";
 import ButtonLogin from "@/components/ButtonLogin";
 import FAQ from "@/components/FAQ";
 
@@ -7,24 +8,34 @@ export default function Home() {
 
   const greeting1 = "Hello " + name;
   console.log(greeting1);
-  // OUTPUT 1: "Hello Andrew"
 
   const greeting2 = `Hello ${isLoggedIn ? name : "there"}`;
   console.log(greeting2);
 
   return (
     <main>
-      {/* Header */}
+      {/* Header with responsive image */}
       <section className="bg-base-300">
         <div className="flex justify-between items-center px-8 py-2 max-w-3xl mx-auto">
-          <div className="font-bold">SPARK AMZ</div>
+          {/* Logo/Image with text */}
+          <div className="flex items-center gap-2">
+            <div className="relative h-8 w-8 sm:h-10 sm:w-10 md:h-12 md:w-12">
+              <Image
+                src="/spark-rough-logo.png" // Your image file name
+                alt="SPARK AMZ Logo"
+                fill
+                className="object-contain"
+                priority
+              />
+            </div>
+            <div className="font-bold text-sm sm:text-base md:text-lg">
+              SPARK AMZ
+            </div>
+          </div>
+
           <div className="space-x-4 max-md:hidden">
-            <a className="link link-hover" href="#pricing">
-              Pricing
-            </a>
-            <a className="link link-hover" href="#faq">
-              FAQ
-            </a>
+            <a className="link link-hover">Pricing</a>
+            <a className="link link-hover">FAQ</a>
           </div>
           <div>
             <ButtonLogin isLoggedIn={isLoggedIn} />
@@ -33,17 +44,45 @@ export default function Home() {
       </section>
 
       {/* Hero */}
-      <section className="text-center py-32 px-8 max-w-3xl mx-auto">
-        <h1 className="text-4xl lg:text-5xl font-extrabold mb-6">
-          SPARK Amazon PPC System
-        </h1>
-        <div className="opacity-90 mb-10">
-          <h2>
-            First of its kind Amazon PPC Algorithm. Tools for Performance, Ease
-            of maintenance, and Client Management.
-          </h2>
+      <section className="py-32 px-8 max-w-6xl mx-auto">
+        <div className="flex flex-col lg:flex-row items-center lg:gap-12">
+          {/* Text Content */}
+          <div className="text-center lg:text-left lg:flex-1">
+            <h1 className="text-4xl lg:text-5xl font-extrabold mb-6">
+              SPARK Amazon PPC System
+            </h1>
+            <div className="opacity-90 mb-10">
+              <h2>
+                First of its kind Amazon PPC Algorithm. Tools for Performance,
+                Ease of maintenance, and Client Management.
+              </h2>
+            </div>
+
+            {/* Button appears after text on desktop */}
+            <div className="hidden lg:flex justify-center lg:justify-start">
+              <ButtonLogin isLoggedIn={isLoggedIn} />
+            </div>
+          </div>
+
+          {/* Image - alternative approach without fill */}
+          <div className="my-10 lg:flex-1">
+            <div className="flex justify-center">
+              <Image
+                src="/spark-rough-logo.png"
+                alt="SPARK Amazon PPC System illustration"
+                width={300} // Set specific width
+                height={300} // Set specific height
+                className="w-full max-w-xs lg:max-w-md"
+                priority
+              />
+            </div>
+          </div>
+
+          {/* Button appears after image on mobile */}
+          <div className="lg:hidden">
+            <ButtonLogin isLoggedIn={isLoggedIn} />
+          </div>
         </div>
-        <ButtonLogin isLoggedIn={isLoggedIn} />
       </section>
 
       {/* Pricing */}
@@ -56,7 +95,7 @@ export default function Home() {
             Better Performance than Pacvue at 1/10th the cost.
           </h2>
           {/* Pricing Card */}
-          <div className="card w-96 bg-base-100 shadow-sm">
+          <div className="card w-96 bg-base-100 shadow-sm mx-auto">
             <div className="card-body">
               <span className="badge badge-xs badge-warning">Most Popular</span>
               <div className="flex justify-between">

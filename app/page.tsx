@@ -1,17 +1,86 @@
 import Image from "next/image";
 import ButtonLogin from "@/components/ButtonLogin";
 import FAQ from "@/components/FAQ";
+import clientpromise from "@/libs/mongo";
 
 export default function Home() {
   const isLoggedIn = true;
   const name = "Andrew";
 
-  const greeting1 = "Hello " + name;
-  console.log(greeting1);
+  // TOGGLE THIS TO SWITCH BETWEEN COMING SOON AND FULL SITE
+  const showComingSoon = true; // Set to false to show your original site
 
-  const greeting2 = `Hello ${isLoggedIn ? name : "there"}`;
-  console.log(greeting2);
+  // Professional Coming Soon Page
+  if (showComingSoon) {
+    return (
+      <main className="min-h-screen bg-gradient-to-br from-gray-900 to-gray-800 flex items-center justify-center px-4">
+        <div className="max-w-2xl mx-auto text-center">
+          {/* Logo */}
+          <div className="mb-8">
+            <div className="relative h-20 w-20 mx-auto mb-4">
+              <Image
+                src="/spark-rough-logo.png"
+                alt="SPARK AMZ Logo"
+                fill
+                className="object-contain"
+                priority
+              />
+            </div>
+            <h1 className="text-4xl md:text-5xl font-bold text-white mb-2">
+              SPARK AMZ
+            </h1>
+            <p className="text-gray-400 text-lg">Amazon PPC Excellence</p>
+          </div>
 
+          {/* Main Message */}
+          <div className="bg-gray-800/50 backdrop-blur-sm rounded-2xl p-8 md:p-12 shadow-2xl border border-gray-700">
+            <h2 className="text-2xl md:text-3xl font-semibold text-white mb-4">
+              Something Powerful is Coming
+            </h2>
+            <p className="text-gray-300 text-lg mb-8 leading-relaxed">
+              We're building the next generation of Amazon PPC management tools.
+              Designed for performance, built for scale, and priced for growth.
+            </p>
+
+            {/* Email Signup */}
+            <div className="max-w-md mx-auto">
+              <p className="text-gray-400 mb-4">
+                Get early access when we launch
+              </p>
+              <form className="flex flex-col sm:flex-row gap-3">
+                <input
+                  type="email"
+                  placeholder="Enter your email"
+                  className="flex-1 px-4 py-3 rounded-lg bg-gray-700 border border-gray-600 text-white placeholder-gray-400 focus:outline-none focus:border-blue-500 focus:ring-2 focus:ring-blue-500/20 transition-all"
+                />
+                <button
+                  type="submit"
+                  className="px-6 py-3 bg-blue-600 hover:bg-blue-700 text-white font-medium rounded-lg transition-colors duration-200 shadow-lg hover:shadow-xl"
+                >
+                  Notify Me
+                </button>
+              </form>
+            </div>
+          </div>
+
+          {/* Contact */}
+          <div className="mt-8 text-gray-400">
+            <p className="text-sm">
+              Have questions? Reach out at{" "}
+              <a
+                href="mailto:accounts@sparkamz.com"
+                className="text-blue-400 hover:text-blue-300 transition-colors"
+              >
+                accounts@sparkamz.com
+              </a>
+            </p>
+          </div>
+        </div>
+      </main>
+    );
+  }
+
+  // YOUR ORIGINAL SITE CODE BELOW (unchanged)
   return (
     <main>
       {/* Header with responsive image */}

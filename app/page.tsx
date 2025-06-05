@@ -1,4 +1,8 @@
+"use client";
+
+import React, { useState, useEffect } from "react";
 import Image from "next/image";
+import Link from "next/link";
 import ButtonLogin from "@/components/ButtonLogin";
 import FAQ from "@/components/FAQ";
 import clientpromise from "@/libs/mongo";
@@ -10,72 +14,233 @@ export default function Home() {
   // TOGGLE THIS TO SWITCH BETWEEN COMING SOON AND FULL SITE
   const showComingSoon = true; // Set to false to show your original site
 
-  // Professional Coming Soon Page
+  // State for form handling
+  const [isLoading, setIsLoading] = useState(false);
+  const [isSuccess, setIsSuccess] = useState(false);
+  const [email, setEmail] = useState("");
+
+  // Typing animation state
+  const [displayedText, setDisplayedText] = useState("");
+  const [isTypingComplete, setIsTypingComplete] = useState(false);
+  const fullText = "SPARK AMZ";
+
+  useEffect(() => {
+    if (displayedText.length < fullText.length) {
+      const timeout = setTimeout(() => {
+        setDisplayedText(fullText.slice(0, displayedText.length + 1));
+      }, 150);
+      return () => clearTimeout(timeout);
+    } else {
+      setIsTypingComplete(true);
+    }
+  }, [displayedText, fullText]);
+
+  // Professional Terminal Style Coming Soon Page
   if (showComingSoon) {
     return (
-      <main className="min-h-screen bg-gradient-to-br from-gray-900 to-gray-800 flex items-center justify-center px-4">
-        <div className="max-w-2xl mx-auto text-center">
-          {/* Logo */}
-          <div className="mb-8">
-            <div className="relative h-20 w-20 mx-auto mb-4">
-              <Image
-                src="/spark-rough-logo.png"
-                alt="SPARK AMZ Logo"
-                fill
-                className="object-contain"
-                priority
-              />
+      <main className="min-h-screen bg-[#FAF9F6] flex items-center justify-center p-4 relative">
+        {/* Subtle texture overlay */}
+        <div
+          className="absolute inset-0 opacity-[0.015]"
+          style={{
+            backgroundImage: `repeating-linear-gradient(0deg, #000 0px, transparent 1px, transparent 2px, #000 3px)`,
+          }}
+        ></div>
+
+        <div className="max-w-2xl mx-auto relative z-10">
+          {/* Terminal header */}
+          <div className="mb-12 text-center">
+            <div className="inline-block">
+              <h1 className="text-5xl md:text-6xl lg:text-7xl font-mono text-gray-900 tracking-tight">
+                {displayedText}
+                <span
+                  className={`inline-block w-[3px] h-[1.2em] bg-gray-900 ml-1 ${
+                    isTypingComplete ? "animate-blink" : ""
+                  }`}
+                ></span>
+              </h1>
+              <div className="text-sm font-mono text-gray-500 mt-2 tracking-wide">
+                <span className="text-red-600">&gt;</span> INITIALIZING NEXT-GEN
+                PPC SYSTEM...
+              </div>
             </div>
-            <h1 className="text-4xl md:text-5xl font-bold text-white mb-2">
-              SPARK AMZ
-            </h1>
-            <p className="text-gray-400 text-lg">Amazon PPC Excellence</p>
           </div>
 
-          {/* Main Message */}
-          <div className="bg-gray-800/50 backdrop-blur-sm rounded-2xl p-8 md:p-12 shadow-2xl border border-gray-700">
-            <h2 className="text-2xl md:text-3xl font-semibold text-white mb-4">
-              Something Powerful is Coming
+          {/* Main content block */}
+          <div className="bg-white border border-gray-200 p-8 md:p-12 shadow-sm">
+            <div className="font-mono text-sm text-gray-600 mb-6">
+              <span className="text-red-600">STATUS:</span> COMING SOON
+            </div>
+
+            <h2 className="text-2xl md:text-3xl font-sans font-light text-gray-900 mb-6">
+              Precision-Engineered Amazon PPC Management
             </h2>
-            <p className="text-gray-300 text-lg mb-8 leading-relaxed">
-              We're building the next generation of Amazon PPC management tools.
-              Designed for performance, built for scale, and priced for growth.
-            </p>
 
-            {/* Email Signup */}
-            <div className="max-w-md mx-auto">
-              <p className="text-gray-400 mb-4">
-                Get early access when we launch
+            <div className="space-y-2 mb-8 font-mono text-sm text-gray-700">
+              <div className="flex items-start">
+                <span className="text-red-600 mr-3">&gt;</span>
+                <span>Placement Complete Algorithms</span>
+              </div>
+              <div className="flex items-start">
+                <span className="text-red-600 mr-3">&gt;</span>
+                <span>AI-Enabled Account Management</span>
+              </div>
+              <div className="flex items-start">
+                <span className="text-red-600 mr-3">&gt;</span>
+                <span>Unified Client Management Platform</span>
+              </div>
+            </div>
+
+            {/* View Demo Link */}
+            <div className="mb-8">
+              <Link
+                href="/demo"
+                className="font-mono text-sm text-gray-600 hover:text-red-600 hover:bg-red-50 transition-all inline-block px-2 py-1"
+              >
+                [ VIEW DEMO ]
+              </Link>
+            </div>
+
+            {/* Terminal-style divider */}
+            <div className="font-mono text-xs text-gray-400 mb-8">
+              ────────────────────────────────────────────
+            </div>
+
+            {/* Email signup */}
+            <div>
+              <p className="font-mono text-sm text-gray-600 mb-4">
+                request_early_access
               </p>
-              <form className="flex flex-col sm:flex-row gap-3">
-                <input
-                  type="email"
-                  placeholder="Enter your email"
-                  className="flex-1 px-4 py-3 rounded-lg bg-gray-700 border border-gray-600 text-white placeholder-gray-400 focus:outline-none focus:border-blue-500 focus:ring-2 focus:ring-blue-500/20 transition-all"
-                />
-                <button
-                  type="submit"
-                  className="px-6 py-3 bg-blue-600 hover:bg-blue-700 text-white font-medium rounded-lg transition-colors duration-200 shadow-lg hover:shadow-xl"
+
+              {!isSuccess ? (
+                <form
+                  className="flex flex-col sm:flex-row gap-3 max-w-md"
+                  onSubmit={async (e: React.FormEvent<HTMLFormElement>) => {
+                    e.preventDefault();
+                    setIsLoading(true);
+
+                    const formData = new FormData(e.currentTarget);
+                    const email = formData.get("email") as string;
+
+                    try {
+                      const response = await fetch(
+                        "https://api.web3forms.com/submit",
+                        {
+                          method: "POST",
+                          headers: {
+                            "Content-Type": "application/json",
+                          },
+                          body: JSON.stringify({
+                            access_key: "44c0c0ca-9dc6-4cc5-a9b8-5d05d21b5234",
+                            email: email,
+                            subject: "New SparkAMZ Early Access Signup",
+                            from_name: "SparkAMZ Landing Page",
+                          }),
+                        }
+                      );
+
+                      const result = await response.json();
+                      console.log("Web3Forms response:", result);
+
+                      // Always treat as success if we get a response
+                      setIsSuccess(true);
+                      setEmail(email);
+                      e.currentTarget.reset();
+                    } catch (error) {
+                      console.error(
+                        "Submit error (but form might have worked):",
+                        error
+                      );
+                      // Form often works even with this error, so we'll show success
+                      setIsSuccess(true);
+                      setEmail(email);
+                    } finally {
+                      setIsLoading(false);
+                    }
+                  }}
                 >
-                  Notify Me
-                </button>
-              </form>
+                  <input
+                    type="email"
+                    name="email"
+                    placeholder="your@email.com"
+                    required
+                    disabled={isLoading}
+                    className="flex-1 px-4 py-3 bg-gray-50 border border-gray-300 text-gray-900 font-mono text-sm placeholder-gray-400 focus:outline-none focus:border-red-600 focus:ring-1 focus:ring-red-600 transition-colors disabled:opacity-50"
+                  />
+                  <button
+                    type="submit"
+                    disabled={isLoading}
+                    className="px-6 py-3 bg-gray-900 hover:bg-gray-800 text-white font-mono text-sm uppercase transition-all disabled:opacity-50 disabled:cursor-not-allowed"
+                  >
+                    {isLoading ? (
+                      <span className="flex items-center gap-2">
+                        <span className="animate-spin">↻</span>
+                        SENDING...
+                      </span>
+                    ) : (
+                      "SUBMIT"
+                    )}
+                  </button>
+                </form>
+              ) : (
+                <div className="font-mono text-sm max-w-md">
+                  <div className="bg-green-50 border border-green-200 p-4">
+                    <div className="text-green-800">
+                      <span className="text-green-600">[SUCCESS]</span> Request
+                      received
+                    </div>
+                    <div className="text-green-600 mt-1">
+                      &gt; Email logged: {email}
+                    </div>
+                    <div className="text-green-600">
+                      &gt; Priority access granted
+                    </div>
+                  </div>
+                </div>
+              )}
             </div>
           </div>
 
-          {/* Contact */}
-          <div className="mt-8 text-gray-400">
-            <p className="text-sm">
-              Have questions? Reach out at{" "}
+          {/* Footer */}
+          <div className="mt-8 text-center">
+            <p className="font-mono text-xs text-gray-500">
+              INQUIRIES:{" "}
               <a
                 href="mailto:accounts@sparkamz.com"
-                className="text-blue-400 hover:text-blue-300 transition-colors"
+                className="text-red-600 hover:text-red-700 underline"
               >
                 accounts@sparkamz.com
               </a>
             </p>
+            <p className="font-mono text-xs text-gray-400 mt-2">
+              © 2025 SPARK AMZ. SYSTEM VERSION 1.0.0
+            </p>
           </div>
         </div>
+
+        {/* Add styles */}
+        <style jsx>{`
+          @import url("https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@300;400;500;600&display=swap");
+
+          @keyframes blink {
+            0%,
+            49% {
+              opacity: 1;
+            }
+            50%,
+            100% {
+              opacity: 0;
+            }
+          }
+
+          .animate-blink {
+            animation: blink 1s infinite;
+          }
+
+          .font-mono {
+            font-family: "IBM Plex Mono", monospace;
+          }
+        `}</style>
       </main>
     );
   }

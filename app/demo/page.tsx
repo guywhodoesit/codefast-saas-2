@@ -11,31 +11,45 @@ export default function DemoPage() {
 
   // Typing animation state
   const [demoText, setDemoText] = useState("");
-  const [isTypingComplete, setIsTypingComplete] = useState(false);
+  const [cursorPosition, setCursorPosition] = useState("end"); // "end" or "inside"
+  const [showContent, setShowContent] = useState(false);
   const fullDemoText = "demo";
 
   useEffect(() => {
-    // Start typing "demo" after a short delay
-    const initialDelay = setTimeout(() => {
+    let typeInterval: any;
+    let contentTimeout: any;
+
+    // Start with cursor at end, then move it inside
+    const moveTimeout = setTimeout(() => {
+      setCursorPosition("inside");
+
+      // Then start typing "demo"
       let currentIndex = 0;
-      const typingInterval = setInterval(() => {
+      typeInterval = setInterval(() => {
         if (currentIndex < fullDemoText.length) {
           setDemoText(fullDemoText.slice(0, currentIndex + 1));
           currentIndex++;
         } else {
-          clearInterval(typingInterval);
-          setIsTypingComplete(true);
+          clearInterval(typeInterval);
+          // Move cursor back to end
+          setCursorPosition("end");
+          // Show content after typing completes
+          contentTimeout = setTimeout(() => {
+            setShowContent(true);
+          }, 500);
         }
       }, 150);
+    }, 800);
 
-      return () => clearInterval(typingInterval);
-    }, 500); // Wait 500ms before starting to type "demo"
-
-    return () => clearTimeout(initialDelay);
+    return () => {
+      clearTimeout(moveTimeout);
+      clearInterval(typeInterval);
+      clearTimeout(contentTimeout);
+    };
   }, []);
 
   return (
-    <main className="min-h-screen bg-[#FAF9F6] flex items-center justify-center p-4 relative">
+    <main className="min-h-screen bg-[#FAF9F6] flex justify-center p-4 relative">
       {/* Subtle texture overlay */}
       <div
         className="absolute inset-0 opacity-[0.015]"
@@ -44,40 +58,36 @@ export default function DemoPage() {
         }}
       ></div>
 
-      <div className="max-w-2xl mx-auto relative z-10">
-        {/* Back link */}
-        <div className="mb-8">
-          <Link
-            href="/"
-            className="font-mono text-sm text-gray-600 hover:text-red-600 hover:bg-red-50 transition-all inline-block px-2 py-1"
-          >
-            [ &larr; BACK ]
-          </Link>
-        </div>
-
-        {/* Terminal header */}
+      <div className="max-w-2xl w-full relative z-10 pt-20 md:pt-32">
+        {/* Terminal header - always visible in final position */}
         <div className="mb-12 text-center">
           <div className="inline-block">
             <h1 className="text-5xl md:text-6xl lg:text-7xl font-mono text-gray-900 tracking-tight">
               spark(
               {demoText}
-              {!isTypingComplete && (
+              {cursorPosition === "inside" && (
                 <span className="inline-block w-[3px] h-[1.2em] bg-gray-900 animate-pulse"></span>
               )}
               )
-              {isTypingComplete && (
+              {cursorPosition === "end" && (
                 <span className="inline-block w-[3px] h-[1.2em] bg-gray-900 ml-1 animate-blink"></span>
               )}
             </h1>
-            <div className="text-sm font-mono text-gray-500 tracking-wide">
+            <div className="text-sm font-mono text-gray-500 mt-2 tracking-wide">
               <span className="text-red-600">&gt;</span> LOADING DEMO
               ENVIRONMENT...
             </div>
           </div>
         </div>
 
-        {/* Main content block */}
-        <div className="bg-white border border-gray-200 p-8 md:p-12 shadow-sm">
+        {/* Main content block - fades in after typing */}
+        <div
+          className={`bg-white border border-gray-200 p-8 md:p-12 shadow-sm transition-all duration-1000 ${
+            showContent
+              ? "opacity-100 translate-y-0"
+              : "opacity-0 translate-y-4"
+          }`}
+        >
           <div className="font-mono text-sm text-gray-600 mb-6">
             <span className="text-red-600">STATUS:</span> DEMO COMING SOON
           </div>
@@ -88,7 +98,7 @@ export default function DemoPage() {
 
           <div className="font-mono text-sm text-gray-700 mb-8">
             <p className="mb-4">
-              Our comprehensive demo showcasing the power of SPARK AMZ is
+              Our comprehensive demo showcasing the power of spark() is
               currently in production.
             </p>
             <p>You'll soon be able to see:</p>
@@ -143,7 +153,7 @@ export default function DemoPage() {
                           "Content-Type": "application/json",
                         },
                         body: JSON.stringify({
-                          access_key: "YOUR-ACCESS-KEY-HERE",
+                          access_key: "44c0c0ca-9dc6-4cc5-a9b8-5d05d21b5234",
                           email: email,
                           subject: "New SparkAMZ Demo Access Request",
                           from_name: "SparkAMZ Demo Page",
@@ -215,8 +225,12 @@ export default function DemoPage() {
           </div>
         </div>
 
-        {/* Footer */}
-        <div className="mt-8 text-center">
+        {/* Footer - also fades in */}
+        <div
+          className={`mt-8 text-center transition-all duration-1000 ${
+            showContent ? "opacity-100" : "opacity-0"
+          }`}
+        >
           <p className="font-mono text-xs text-gray-500">
             INQUIRIES:{" "}
             <a

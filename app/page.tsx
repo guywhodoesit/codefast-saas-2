@@ -22,6 +22,7 @@ export default function Home() {
   // Typing animation state
   const [displayedText, setDisplayedText] = useState("");
   const [isTypingComplete, setIsTypingComplete] = useState(false);
+  const [showContent, setShowContent] = useState(false);
   const fullText = "spark()";
 
   useEffect(() => {
@@ -32,13 +33,17 @@ export default function Home() {
       return () => clearTimeout(timeout);
     } else {
       setIsTypingComplete(true);
+      // Delay before showing content
+      setTimeout(() => {
+        setShowContent(true);
+      }, 500);
     }
   }, [displayedText, fullText]);
 
   // Professional Terminal Style Coming Soon Page
   if (showComingSoon) {
     return (
-      <main className="min-h-screen bg-[#FAF9F6] flex items-center justify-center p-4 relative">
+      <main className="min-h-screen bg-[#FAF9F6] flex justify-center p-4 relative">
         {/* Subtle texture overlay */}
         <div
           className="absolute inset-0 opacity-[0.015]"
@@ -47,8 +52,8 @@ export default function Home() {
           }}
         ></div>
 
-        <div className="max-w-2xl mx-auto relative z-10">
-          {/* Terminal header */}
+        <div className="max-w-2xl w-full relative z-10 pt-20 md:pt-32">
+          {/* Terminal header - always visible in final position */}
           <div className="mb-12 text-center">
             <div className="inline-block">
               <h1 className="text-5xl md:text-6xl lg:text-7xl font-mono text-gray-900 tracking-tight">
@@ -59,15 +64,25 @@ export default function Home() {
                   }`}
                 ></span>
               </h1>
-              <div className="text-sm font-mono text-gray-500 mt-2 tracking-wide">
+              <div
+                className={`text-sm font-mono text-gray-500 mt-2 tracking-wide transition-opacity duration-500 ${
+                  isTypingComplete ? "opacity-100" : "opacity-0"
+                }`}
+              >
                 <span className="text-red-600">&gt;</span> AMAZON PPC EXECUTION
                 ENGINE
               </div>
             </div>
           </div>
 
-          {/* Main content block */}
-          <div className="bg-white border border-gray-200 p-8 md:p-12 shadow-sm">
+          {/* Main content block - fades in after typing */}
+          <div
+            className={`bg-white border border-gray-200 p-8 md:p-12 shadow-sm transition-all duration-1000 ${
+              showContent
+                ? "opacity-100 translate-y-0"
+                : "opacity-0 translate-y-4"
+            }`}
+          >
             <div className="font-mono text-sm text-gray-600 mb-6">
               <span className="text-red-600">STATUS:</span> COMING SOON
             </div>
@@ -131,7 +146,7 @@ export default function Home() {
                             "Content-Type": "application/json",
                           },
                           body: JSON.stringify({
-                            access_key: "YOUR-ACCESS-KEY-HERE",
+                            access_key: "44c0c0ca-9dc6-4cc5-a9b8-5d05d21b5234",
                             email: email,
                             subject: "New SparkAMZ Early Access Signup",
                             from_name: "SparkAMZ Landing Page",
@@ -201,8 +216,12 @@ export default function Home() {
             </div>
           </div>
 
-          {/* Footer */}
-          <div className="mt-8 text-center">
+          {/* Footer - also fades in */}
+          <div
+            className={`mt-8 text-center transition-all duration-1000 ${
+              showContent ? "opacity-100" : "opacity-0"
+            }`}
+          >
             <p className="font-mono text-xs text-gray-500">
               INQUIRIES:{" "}
               <a
@@ -233,8 +252,22 @@ export default function Home() {
             }
           }
 
+          @keyframes pulse {
+            0%,
+            100% {
+              opacity: 1;
+            }
+            50% {
+              opacity: 0.5;
+            }
+          }
+
           .animate-blink {
             animation: blink 1s infinite;
+          }
+
+          .animate-pulse {
+            animation: pulse 0.5s infinite;
           }
 
           .font-mono {

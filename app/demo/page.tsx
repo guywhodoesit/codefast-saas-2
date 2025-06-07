@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import Link from "next/link";
 
 export default function DemoPage() {
@@ -8,6 +8,31 @@ export default function DemoPage() {
   const [isLoading, setIsLoading] = useState(false);
   const [isSuccess, setIsSuccess] = useState(false);
   const [email, setEmail] = useState("");
+
+  // Typing animation state
+  const [demoText, setDemoText] = useState("");
+  const [isTypingComplete, setIsTypingComplete] = useState(false);
+  const fullDemoText = "demo";
+
+  useEffect(() => {
+    // Start typing "demo" after a short delay
+    const initialDelay = setTimeout(() => {
+      let currentIndex = 0;
+      const typingInterval = setInterval(() => {
+        if (currentIndex < fullDemoText.length) {
+          setDemoText(fullDemoText.slice(0, currentIndex + 1));
+          currentIndex++;
+        } else {
+          clearInterval(typingInterval);
+          setIsTypingComplete(true);
+        }
+      }, 150);
+
+      return () => clearInterval(typingInterval);
+    }, 500); // Wait 500ms before starting to type "demo"
+
+    return () => clearTimeout(initialDelay);
+  }, []);
 
   return (
     <main className="min-h-screen bg-[#FAF9F6] flex items-center justify-center p-4 relative">
@@ -33,8 +58,16 @@ export default function DemoPage() {
         {/* Terminal header */}
         <div className="mb-12 text-center">
           <div className="inline-block">
-            <h1 className="text-4xl md:text-5xl font-mono text-gray-900 tracking-tight mb-2">
-              SPARK AMZ DEMO
+            <h1 className="text-5xl md:text-6xl lg:text-7xl font-mono text-gray-900 tracking-tight">
+              spark(
+              {demoText}
+              {!isTypingComplete && (
+                <span className="inline-block w-[3px] h-[1.2em] bg-gray-900 animate-pulse"></span>
+              )}
+              )
+              {isTypingComplete && (
+                <span className="inline-block w-[3px] h-[1.2em] bg-gray-900 ml-1 animate-blink"></span>
+              )}
             </h1>
             <div className="text-sm font-mono text-gray-500 tracking-wide">
               <span className="text-red-600">&gt;</span> LOADING DEMO
@@ -110,7 +143,7 @@ export default function DemoPage() {
                           "Content-Type": "application/json",
                         },
                         body: JSON.stringify({
-                          access_key: "44c0c0ca-9dc6-4cc5-a9b8-5d05d21b5234",
+                          access_key: "YOUR-ACCESS-KEY-HERE",
                           email: email,
                           subject: "New SparkAMZ Demo Access Request",
                           from_name: "SparkAMZ Demo Page",
@@ -194,7 +227,7 @@ export default function DemoPage() {
             </a>
           </p>
           <p className="font-mono text-xs text-gray-400 mt-2">
-            © 2025 SPARK AMZ. DEMO VERSION 1.0.0
+            © 2025 spark(). DEMO VERSION 1.0.0
           </p>
         </div>
       </div>
@@ -202,6 +235,35 @@ export default function DemoPage() {
       {/* Add styles */}
       <style jsx>{`
         @import url("https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@300;400;500;600&display=swap");
+
+        @keyframes blink {
+          0%,
+          49% {
+            opacity: 1;
+          }
+          50%,
+          100% {
+            opacity: 0;
+          }
+        }
+
+        @keyframes pulse {
+          0%,
+          100% {
+            opacity: 1;
+          }
+          50% {
+            opacity: 0.5;
+          }
+        }
+
+        .animate-blink {
+          animation: blink 1s infinite;
+        }
+
+        .animate-pulse {
+          animation: pulse 0.5s infinite;
+        }
 
         .font-mono {
           font-family: "IBM Plex Mono", monospace;

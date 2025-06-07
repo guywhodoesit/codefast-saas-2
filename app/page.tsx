@@ -22,7 +22,7 @@ export default function Home() {
   // Typing animation state
   const [displayedText, setDisplayedText] = useState("");
   const [isTypingComplete, setIsTypingComplete] = useState(false);
-  const fullText = "SPARK AMZ";
+  const fullText = "spark()";
 
   useEffect(() => {
     if (displayedText.length < fullText.length) {
@@ -60,8 +60,8 @@ export default function Home() {
                 ></span>
               </h1>
               <div className="text-sm font-mono text-gray-500 mt-2 tracking-wide">
-                <span className="text-red-600">&gt;</span> INITIALIZING NEXT-GEN
-                PPC SYSTEM...
+                <span className="text-red-600">&gt;</span> AMAZON PPC EXECUTION
+                ENGINE
               </div>
             </div>
           </div>
@@ -83,7 +83,7 @@ export default function Home() {
               </div>
               <div className="flex items-start">
                 <span className="text-red-600 mr-3">&gt;</span>
-                <span>AI-Enabled Account Management</span>
+                <span>AI-Powered Campaign Optimization</span>
               </div>
               <div className="flex items-start">
                 <span className="text-red-600 mr-3">&gt;</span>
@@ -131,7 +131,7 @@ export default function Home() {
                             "Content-Type": "application/json",
                           },
                           body: JSON.stringify({
-                            access_key: "44c0c0ca-9dc6-4cc5-a9b8-5d05d21b5234",
+                            access_key: "YOUR-ACCESS-KEY-HERE",
                             email: email,
                             subject: "New SparkAMZ Early Access Signup",
                             from_name: "SparkAMZ Landing Page",
@@ -213,7 +213,7 @@ export default function Home() {
               </a>
             </p>
             <p className="font-mono text-xs text-gray-400 mt-2">
-              © 2025 SPARK AMZ. SYSTEM VERSION 1.0.0
+              © 2025 spark(). SYSTEM VERSION 1.0.0
             </p>
           </div>
         </div>
@@ -256,14 +256,14 @@ export default function Home() {
             <div className="relative h-8 w-8 sm:h-10 sm:w-10 md:h-12 md:w-12">
               <Image
                 src="/spark-rough-logo.png" // Your image file name
-                alt="SPARK AMZ Logo"
+                alt="spark() Logo"
                 fill
                 className="object-contain"
                 priority
               />
             </div>
-            <div className="font-bold text-sm sm:text-base md:text-lg">
-              SPARK AMZ
+            <div className="font-bold text-sm sm:text-base md:text-lg font-mono">
+              spark()
             </div>
           </div>
 
@@ -282,8 +282,8 @@ export default function Home() {
         <div className="flex flex-col lg:flex-row items-center lg:gap-12">
           {/* Text Content */}
           <div className="text-center lg:text-left lg:flex-1">
-            <h1 className="text-4xl lg:text-5xl font-extrabold mb-6">
-              SPARK Amazon PPC System
+            <h1 className="text-4xl lg:text-5xl font-extrabold mb-6 font-mono">
+              spark() PPC System
             </h1>
             <div className="opacity-90 mb-10">
               <h2>
@@ -303,7 +303,7 @@ export default function Home() {
             <div className="flex justify-center">
               <Image
                 src="/spark-rough-logo.png"
-                alt="SPARK Amazon PPC System illustration"
+                alt="spark() PPC System illustration"
                 width={300} // Set specific width
                 height={300} // Set specific height
                 className="w-full max-w-xs lg:max-w-md"
@@ -333,7 +333,7 @@ export default function Home() {
             <div className="card-body">
               <span className="badge badge-xs badge-warning">Most Popular</span>
               <div className="flex justify-between">
-                <h2 className="text-3xl font-bold">Spark</h2>
+                <h2 className="text-3xl font-bold font-mono">spark()</h2>
                 <span className="text-xl mt-2">$200/mo per account</span>
               </div>
               <ul className="mt-6 flex flex-col gap-2 text-xs">
